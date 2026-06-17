@@ -1,79 +1,565 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfólio | Engenharia & Governança</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .code-font { font-family: 'Fira Code', monospace; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-text { background: linear-gradient(90deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PDV - Festa Junina Scout</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --red: #c0392b;
+      --red-dark: #962d22;
+      --orange: #e67e22;
+      --green: #27ae60;
+      --green-dark: #1e8449;
+      --danger: #e74c3c;
+      --bg: #faf6f0;
+      --card: #fff;
+      --text: #2c3e50;
+      --text-light: #7f8c8d;
+      --border: #eee;
+      --shadow: 0 2px 10px rgba(0,0,0,0.07);
+    }
+    html { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+      min-height: 100%;
+      padding-bottom: 24px;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, var(--red), var(--red-dark));
+      color: #fff;
+      padding: 14px 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+    header h1 { font-size: 1.15rem; letter-spacing: -0.3px; }
+    header p { font-size: 0.75rem; opacity: .85; margin-top: 2px; }
+
+    .container { padding: 12px; max-width: 640px; margin: 0 auto; }
+    .section { margin-bottom: 18px; }
+    .section-title {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--red);
+      border-bottom: 2px solid var(--red);
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* PRODUCT GRID */
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+    .produto-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    .produto-nome { font-size: .82rem; font-weight: 700; line-height: 1.2; }
+    .produto-desc { font-size: .7rem; color: var(--text-light); margin: 2px 0 4px; }
+    .produto-preco {
+      font-size: 1.05rem; font-weight: 800; color: var(--orange);
+      margin: auto 0 8px;
+    }
+
+    .qty-wrap {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: auto;
+    }
+    .qty-btn {
+      width: 42px; height: 42px; border: none; border-radius: 50%;
+      background: var(--red); color: #fff;
+      font-size: 1.25rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none;
+      transition: transform .08s;
+    }
+    .qty-btn:active { transform: scale(.9); }
+    .qty-value {
+      font-size: 1.1rem; font-weight: 700; min-width: 24px; text-align: center;
+    }
+
+    /* CONFIRM BUTTON */
+    .btn-confirmar {
+      display: block; width: 100%;
+      padding: 14px; margin-top: 12px;
+      background: var(--green); color: #fff;
+      border: none; border-radius: 12px;
+      font-size: 1.05rem; font-weight: 700; letter-spacing: .3px;
+      cursor: pointer; user-select: none;
+      box-shadow: 0 3px 8px rgba(39,174,96,.3);
+      transition: transform .08s, box-shadow .08s;
+    }
+    .btn-confirmar:active { transform: translateY(1px); box-shadow: 0 1px 3px rgba(39,174,96,.3); }
+
+    /* SUMMARY CARDS */
+    .resumo-cards {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .card-resumo {
+      background: var(--card); border-radius: 12px; padding: 14px;
+      box-shadow: var(--shadow); text-align: center;
+    }
+    .card-resumo .label {
+      font-size: .65rem; text-transform: uppercase; letter-spacing: .4px;
+      color: var(--text-light);
+    }
+    .card-resumo .valor {
+      font-size: 1.35rem; font-weight: 800; color: var(--red);
+      display: block; margin-top: 3px;
+    }
+
+    /* CONSOLIDATED TABLE */
+    .table-wrap {
+      background: var(--card); border-radius: 12px; box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+    .table-wrap thead { background: var(--red); color: #fff; }
+    .table-wrap th {
+      padding: 8px 10px; text-align: left; font-weight: 600;
+    }
+    .table-wrap th:last-child { text-align: right; }
+    .table-wrap td {
+      padding: 6px 10px; border-bottom: 1px solid var(--border);
+    }
+    .table-wrap td:last-child { text-align: right; font-weight: 600; }
+    .table-wrap td:nth-child(2) { text-align: center; }
+    .table-wrap tr:last-child td { border-bottom: none; }
+
+    /* LOG */
+    #log-lista {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .log-entry {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--card); padding: 7px 10px;
+      border-radius: 8px; box-shadow: var(--shadow); font-size: .78rem;
+    }
+    .log-entry.estorno {
+      background: #fde8e8;
+    }
+    .log-time {
+      font-family: 'Courier New', monospace;
+      color: var(--text-light); font-size: .7rem;
+      white-space: nowrap; min-width: 52px;
+    }
+    .log-produto { flex: 1; }
+    .log-valor { font-weight: 700; white-space: nowrap; min-width: 55px; text-align: right; }
+    .log-label-estorno {
+      font-size: .65rem; font-weight: 700; color: var(--danger);
+      text-transform: uppercase; margin-right: 2px;
+    }
+    .log-entry.estorno .log-valor { color: var(--danger); }
+    .log-entry.estorno .log-produto { color: var(--danger); }
+
+    .btn-estorno {
+      width: 30px; height: 30px; border: none; border-radius: 50%;
+      background: var(--danger); color: #fff;
+      font-size: .75rem; font-weight: 700;
+      cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .08s;
+    }
+    .btn-estorno:active { transform: scale(.88); }
+    .btn-estorno:disabled { background: #ccc; cursor: not-allowed; }
+
+    .log-empty {
+      text-align: center; color: var(--text-light);
+      font-size: .8rem; padding: 16px;
+    }
+
+    /* RESET */
+    footer { text-align: center; padding: 16px 12px 8px; }
+    .btn-reset {
+      padding: 11px 22px; background: var(--danger); color: #fff;
+      border: none; border-radius: 10px;
+      font-size: .82rem; font-weight: 600; cursor: pointer;
+      transition: transform .08s;
+    }
+    .btn-reset:active { transform: scale(.97); }
+
+    /* TOAST */
+    #toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #222; color: #fff; padding: 10px 20px;
+      border-radius: 10px; font-size: .82rem; font-weight: 500;
+      z-index: 999; opacity: 0; transition: opacity .25s;
+      pointer-events: none; white-space: nowrap;
+    }
+    #toast.show { opacity: 1; }
+
+    @media (max-width: 380px) {
+      .produtos-grid { grid-template-columns: repeat(2, 1fr); }
+      .produto-card { padding: 10px; }
+      .produto-nome { font-size: .75rem; }
+      .qty-btn { width: 30px; height: 30px; font-size: 1rem; }
+      header h1 { font-size: 1rem; }
+    }
+    @media (min-width: 641px) {
+      .produtos-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
 </head>
-<body class="bg-[#0f172a] text-slate-300 antialiased">
+<body>
 
-    <!-- Navegação -->
-    <nav class="fixed top-0 w-full z-50 glass py-4 px-8 flex justify-between items-center">
-        <span class="code-font font-bold text-blue-400">&lt;dev_governance /&gt;</span>
-        <div class="space-x-6 text-sm font-medium uppercase tracking-widest">
-            <a href="#sobre" class="hover:text-blue-400 transition">Sobre</a>
-            <a href="#projetos" class="hover:text-blue-400 transition">Projetos</a>
-            <a href="#contato" class="hover:text-blue-400 transition">Contato</a>
-        </div>
-    </nav>
+  <header>
+    <h1>🎪 Festa Junina Scout</h1>
+    <p>Sistema de Frente de Caixa</p>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="h-screen flex flex-col justify-center items-center text-center px-4">
-        <div class="mb-4 inline-block px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-bold uppercase tracking-tighter">
-            Análise e Desenvolvimento de Sistemas
-        </div>
-        <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6">
-            Construindo pontes entre <br> <span class="gradient-text">Código e Governança</span>
-        </h1>
-        <p class="max-w-2xl text-lg text-slate-400 mb-8">
-            Desenvolvedor Python especializado em FastAPI e entusiasta de frameworks de gestão. 
-            Transformando processos complexos em arquiteturas de software eficientes.
-        </p>
-        <div class="flex gap-4">
-            <a href="#projetos" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold transition shadow-lg shadow-blue-500/20">Ver Projetos</a>
-            <a href="#" class="glass px-8 py-3 rounded-lg font-semibold hover:bg-white/5 transition">Currículo</a>
-        </div>
+  <div class="container">
+
+    <!-- SEÇÃO PRODUTOS -->
+    <section class="section">
+      <div class="section-title">Selecionar Produtos</div>
+      <div class="produtos-grid" id="produtos-grid"></div>
+      <button class="btn-confirmar" id="btn-confirmar">Confirmar Venda</button>
     </section>
 
-    <!-- Seção de Expertise -->
-    <section id="sobre" class="py-20 px-8 max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold text-white mb-12 flex items-center gap-4">
-            <i data-lucide="shield-check" class="text-blue-400"></i> Expertise
-        </h2>
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Card 1: Backend -->
-            <div class="glass p-8 rounded-2xl">
-                <i data-lucide="database" class="mb-4 text-blue-400"></i>
-                <h3 class="text-xl font-semibold text-white mb-2">Backend & Dados</h3>
-                <p class="text-sm leading-relaxed">Desenvolvimento de APIs robustas com FastAPI, SQLAlchemy e modelagem avançada em PostgreSQL (JSONB).</p>
-            </div>
-            <!-- Card 2: Governança -->
-            <div class="glass p-8 rounded-2xl">
-                <i data-lucide="git-branch" class="mb-4 text-purple-400"></i>
-                <h3 class="text-xl font-semibold text-white mb-2">GTI & Processos</h3>
-                <p class="text-sm leading-relaxed">Aplicação de frameworks ITIL 4 e COBIT 2019 para garantir conformidade, qualidade e entrega de valor.</p>
-            </div>
-            <!-- Card 3: Liderança -->
-            <div class="glass p-8 rounded-2xl">
-                <i data-lucide="users" class="mb-4 text-green-400"></i>
-                <h3 class="text-xl font-semibold text-white mb-2">Impacto Social</h3>
-                <p class="text-sm leading-relaxed">Liderança ativa e gestão de projetos complexos em ambientes desafiadores e dinâmicos.</p>
-            </div>
+    <!-- SEÇÃO RESUMO -->
+    <section class="section">
+      <div class="section-title">Resumo Financeiro</div>
+      <div class="resumo-cards">
+        <div class="card-resumo">
+          <div class="label">Produtos Vendidos</div>
+          <span class="valor" id="total-produtos">0</span>
         </div>
+        <div class="card-resumo">
+          <div class="label">Total Arrecadado</div>
+          <span class="valor" id="total-arrecadado">R$ 0,00</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qtd</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-consolidado"></tbody>
+        </table>
+      </div>
     </section>
 
-    <script>
-        // Inicializa os ícones Lucide
-        lucide.createIcons();
-    </script>
+    <!-- SEÇÃO LOG -->
+    <section class="section">
+      <div class="section-title">Log de Transações</div>
+      <div id="log-lista"></div>
+    </section>
+
+  </div>
+
+  <footer>
+    <button class="btn-reset" id="btn-reset">Zerar Caixa / Resetar Sistema</button>
+  </footer>
+
+  <div id="toast"></div>
+
+  <script>
+    // ============= CONFIG =============
+    const STORAGE_KEY = 'pdvFestaJunina';
+
+    const PRODUTOS = [
+      { id: 'estalinho',    nome: 'Estalinho',               desc: '2 por R$ 3,00', preco: 3.00, qtdItem: 2, logNome: '2x Estalinho' },
+      { id: 'quentao300',   nome: 'Quentão (copo isopor 300ml)', desc: '',           preco: 9.00, qtdItem: 1, logNome: 'Quentão (copo isopor 300 ml)' },
+      { id: 'quentao180',   nome: 'Quentão (copo GE 180ml)', desc: '',               preco: 6.00, qtdItem: 1, logNome: 'Quentão (copo GE 180ml)' },
+      { id: 'cafe',         nome: 'Café',                    desc: '',               preco: 4.00, qtdItem: 1, logNome: 'Café' },
+      { id: 'pinhao',       nome: 'Pinhão',                  desc: '',               preco: 6.00, qtdItem: 1, logNome: 'Pinhão' },
+      { id: 'brincadeira',  nome: 'Brincadeira',             desc: '',               preco: 2.00, qtdItem: 1, logNome: 'Brincadeira' },
+      { id: 'pintura',      nome: 'Pintura no rosto',        desc: '',               preco: 2.00, qtdItem: 1, logNome: 'Pintura no rosto' },
+    ];
+
+    // ============= STATE =============
+    let quantidades = {};
+    let logVendas = [];
+
+    // ============= PERSISTENCE =============
+    function carregarDados() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        logVendas = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(logVendas)) logVendas = [];
+      } catch { logVendas = []; }
+    }
+
+    function salvarDados() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(logVendas)); } catch {}
+    }
+
+    // ============= UTILS =============
+    function fmtMoeda(v) {
+      const signal = v < 0 ? '-' : '';
+      return signal + 'R$ ' + Math.abs(v).toFixed(2).replace('.', ',');
+    }
+
+    function fmtHms(ts) {
+      const d = new Date(ts);
+      return String(d.getHours()).padStart(2, '0') + ':' +
+             String(d.getMinutes()).padStart(2, '0') + ':' +
+             String(d.getSeconds()).padStart(2, '0');
+    }
+
+    function getProduto(id) { return PRODUTOS.find(p => p.id === id); }
+
+    function getQty(id) { return quantidades[id] || 0; }
+
+    // ============= DERIVED DATA =============
+    function computarResumo() {
+      const map = {};
+      PRODUTOS.forEach(p => { map[p.id] = { qtd: 0, valor: 0 }; });
+
+      logVendas.forEach(e => {
+        if (!map[e.prodId]) return;
+        if (e.estorno) {
+          map[e.prodId].qtd -= e.qtdUn;
+          map[e.prodId].valor += e.valor; // e.valor is negative
+        } else {
+          map[e.prodId].qtd += e.qtdUn;
+          map[e.prodId].valor += e.valor;
+        }
+      });
+
+      let totalUn = 0;
+      let totalVal = 0;
+      const rows = PRODUTOS.map(p => {
+        const r = map[p.id];
+        totalUn += r.qtd;
+        totalVal += r.valor;
+        return { ...p, qtd: r.qtd, valor: r.valor };
+      });
+
+      return { rows, totalUn, totalVal };
+    }
+
+    // ============= RENDER =============
+    function renderizarProdutos() {
+      const grid = document.getElementById('produtos-grid');
+      grid.innerHTML = PRODUTOS.map(p => `
+        <div class="produto-card">
+          <div class="produto-nome">${p.nome}</div>
+          ${p.desc ? `<div class="produto-desc">${p.desc}</div>` : ''}
+          <div class="produto-preco">${fmtMoeda(p.preco)}</div>
+          <div class="qty-wrap">
+            <button class="qty-btn" data-prod="${p.id}" data-delta="-1" type="button">−</button>
+            <span class="qty-value" data-qty="${p.id}">0</span>
+            <button class="qty-btn" data-prod="${p.id}" data-delta="1" type="button">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderizarQuantidades() {
+      document.querySelectorAll('[data-qty]').forEach(el => {
+        el.textContent = getQty(el.dataset.qty);
+      });
+    }
+
+    function renderizarResumo() {
+      const { rows, totalUn, totalVal } = computarResumo();
+
+      document.getElementById('total-produtos').textContent = totalUn;
+      document.getElementById('total-arrecadado').textContent = fmtMoeda(totalVal);
+
+      const tbody = document.getElementById('tabela-consolidado');
+      tbody.innerHTML = rows.map(r => `
+        <tr>
+          <td>${r.nome}</td>
+          <td>${r.qtd} un.</td>
+          <td>${fmtMoeda(r.valor)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderizarLog() {
+      const lista = document.getElementById('log-lista');
+
+      if (logVendas.length === 0) {
+        lista.innerHTML = '<div class="log-empty">Nenhuma venda registrada ainda.</div>';
+        return;
+      }
+
+      // Mostrar em ordem decrescente (mais recente primeiro)
+      const sorted = [...logVendas].reverse();
+
+      // Mapear ids que já foram estornados
+      const estornados = new Set();
+      logVendas.filter(e => e.estorno).forEach(e => estornados.add(e.origId));
+
+      lista.innerHTML = sorted.map(e => {
+        const prod = getProduto(e.prodId);
+        const nome = prod ? prod.logNome : e.prodId;
+
+        if (e.estorno) {
+          return `
+            <div class="log-entry estorno">
+              <span class="log-time">[${fmtHms(e.ts)}]</span>
+              <span class="log-produto"><span class="log-label-estorno">[ESTORNO]</span> ${nome}</span>
+              <span class="log-valor">${fmtMoeda(e.valor)}</span>
+              <button class="btn-estorno" disabled type="button">✕</button>
+            </div>
+          `;
+        }
+
+        const podeEstornar = !estornados.has(e.id);
+        return `
+          <div class="log-entry">
+            <span class="log-time">[${fmtHms(e.ts)}]</span>
+            <span class="log-produto">${nome}</span>
+            <span class="log-valor">${fmtMoeda(e.valor)}</span>
+            <button class="btn-estorno" data-estorno-id="${e.id}" ${podeEstornar ? '' : 'disabled'} type="button">✕</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderizarTudo() {
+      renderizarQuantidades();
+      renderizarResumo();
+      renderizarLog();
+    }
+
+    // ============= ACTIONS =============
+    function confirmarVenda() {
+      const selecionados = PRODUTOS.filter(p => getQty(p.id) > 0);
+      if (selecionados.length === 0) {
+        mostrarToast('Selecione pelo menos um item.');
+        return;
+      }
+
+      const now = Date.now();
+      const novas = [];
+
+      selecionados.forEach(p => {
+        const qty = getQty(p.id);
+        for (let i = 0; i < qty; i++) {
+          novas.push({
+            id: now + '_' + novas.length,
+            ts: now,
+            prodId: p.id,
+            valor: p.preco,
+            qtdUn: p.qtdItem,
+            estorno: false,
+            origId: null,
+          });
+        }
+      });
+
+      logVendas.push(...novas);
+      salvarDados();
+
+      // Limpar quantidades
+      quantidades = {};
+
+      renderizarTudo();
+      const totalItens = novas.length;
+      mostrarToast(totalItens + ' item(ns) registrado(s).');
+    }
+
+    function estornarVenda(id) {
+      const venda = logVendas.find(e => e.id === id);
+      if (!venda || venda.estorno) return;
+
+      // Verificar se já foi estornado
+      const jaEstornado = logVendas.some(e => e.estorno && e.origId === id);
+      if (jaEstornado) return;
+
+      const prod = getProduto(venda.prodId);
+      if (!prod) return;
+
+      logVendas.push({
+        id: 'est_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        ts: Date.now(),
+        prodId: venda.prodId,
+        valor: -Math.abs(venda.valor),
+        qtdUn: venda.qtdUn,
+        estorno: true,
+        origId: id,
+      });
+
+      salvarDados();
+      renderizarTudo();
+      mostrarToast('Venda estornada.');
+    }
+
+    function resetarSistema() {
+      if (!confirm('Tem certeza que deseja apagar todas as vendas deste aparelho?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      logVendas = [];
+      quantidades = {};
+      renderizarTudo();
+      mostrarToast('Sistema resetado.');
+    }
+
+    // ============= TOAST =============
+    let toastTimer = null;
+
+    function mostrarToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
+    }
+
+    // ============= EVENTS =============
+    function bindEvents() {
+      // Quantidade +/- via delegação
+      document.getElementById('produtos-grid').addEventListener('click', function(e) {
+        const btn = e.target.closest('.qty-btn');
+        if (!btn) return;
+        const id = btn.dataset.prod;
+        const delta = parseInt(btn.dataset.delta, 10);
+        const atual = getQty(id);
+        const nova = Math.max(0, atual + delta);
+        if (atual === nova) return;
+        quantidades[id] = nova;
+        renderizarQuantidades();
+      });
+
+      // Confirmar venda
+      document.getElementById('btn-confirmar').addEventListener('click', confirmarVenda);
+
+      // Estorno via delegação no log
+      document.getElementById('log-lista').addEventListener('click', function(e) {
+        const btn = e.target.closest('.btn-estorno');
+        if (!btn || btn.disabled) return;
+        const id = btn.dataset.estornoId;
+        if (id) estornarVenda(id);
+      });
+
+      // Reset
+      document.getElementById('btn-reset').addEventListener('click', resetarSistema);
+    }
+
+    // ============= BOOT =============
+    (function init() {
+      PRODUTOS.forEach(p => { quantidades[p.id] = 0; });
+      carregarDados();
+      renderizarProdutos();
+      renderizarTudo();
+      bindEvents();
+    })();
+  </script>
 </body>
 </html>
